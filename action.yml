@@ -11,9 +11,38 @@ branding:
 
 # Define your inputs here.
 inputs:
+  token:
+    description: 'GitHub token'
+    required: true
+  package-title:
+    description: 'Package title'
+    required: true
+  package-author:
+    description: 'Package author'
+    required: true
+  package-id:
+    description: 'Package ID'
+    required: true
+  package-url:
+    description: 'Package URL'
+    required: true
+  repositories:
+    description: 'Comma-separated list of repository owner/repo'
+    required: true
+  path:
+    description: 'Path to save the package list'
+    required: false
+  minified:
+    description: 'Minified output'
+    required: false
+    default: false
 
 # Define your outputs here.
 outputs:
+  package:
+    description: 'Package data'
+  path:
+    description: 'Path to the package list'
 
 runs:
   using: node20
