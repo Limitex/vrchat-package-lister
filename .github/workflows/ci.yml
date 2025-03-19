@@ -56,7 +56,18 @@ jobs:
       - name: Test Local Action
         id: test-action
         uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          package-title: 'Test Action'
+          package-author: 'Test Author'
+          package-id: 'test-action'
+          package-url: 'https://github.com/test-action'
+          repositories: 'actions/typescript-action'
+          path: '.index.json'
+          minified: true
 
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs }}"
+        run: |
+          echo "Package: ${{ steps.test-action.outputs.package }}"
+          echo "Path: ${{ steps.test-action.outputs.path }}"
