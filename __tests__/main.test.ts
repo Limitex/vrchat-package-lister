@@ -17,9 +17,13 @@ import {
 jest.unstable_mockModule('@actions/core', () => core)
 
 const mockWriteFile = jest.fn().mockImplementation(() => Promise.resolve())
+const mockGetFilePath = jest.fn().mockImplementation((dir, filename) => {
+  return dir && filename ? `${dir}/${filename}` : ''
+})
 jest.unstable_mockModule('../src/file-writer.js', () => ({
   FileWriter: {
-    writeFile: mockWriteFile
+    writeFile: mockWriteFile,
+    getFilePath: mockGetFilePath
   }
 }))
 
@@ -64,8 +68,10 @@ describe('main.ts', () => {
           return 'https://example.com/test'
         case 'repositories':
           return 'testAuthor/testRepo'
-        case 'path':
-          return 'output/vpm.json'
+        case 'output':
+          return 'output'
+        case 'filename':
+          return 'vpm.json'
         case 'minified':
           return 'false'
         default:
@@ -95,6 +101,8 @@ describe('main.ts', () => {
       author: 'Test Author',
       packages: {}
     })
+
+    mockGetFilePath.mockReturnValue('output/vpm.json')
   })
 
   test('sets debug messages for the workflow', async () => {
@@ -223,11 +231,7 @@ describe('main.ts', () => {
   })
 
   test('skips file creation when path is empty', async () => {
-    const baseImplementation = core.getInput.getMockImplementation()
-    core.getInput.mockImplementation((name) => {
-      if (name === 'path') return ''
-      return baseImplementation ? baseImplementation(name) : ''
-    })
+    mockGetFilePath.mockReturnValueOnce('')
 
     await run()
 
@@ -263,5 +267,45 @@ describe('main.ts', () => {
     await run()
 
     expect(core.setFailed).not.toHaveBeenCalled()
+  })
+
+  test('FileWriter.getFilePath is called correctly', async () => {
+    await run()
+
+    expect(mockGetFilePath).toHaveBeenCalledWith('output', 'vpm.json')
+  })
+
+  test('skips file creation when output file path is empty', async () => {
+    mockGetFilePath.mockReturnValueOnce('')
+
+    await run()
+
+    expect(mockWriteFile).not.toHaveBeenCalled()
+    expect(core.debug).toHaveBeenCalledWith(
+      'No path specified, skipping file creation'
+    )
+  })
+
+  test('sets outputs when file write succeeds', async () => {
+    await run()
+
+    expect(mockWriteFile).toHaveBeenCalledWith(
+      'output/vpm.json',
+      expect.any(String)
+    )
+    expect(core.setOutput).toHaveBeenCalledWith('output', 'output')
+    expect(core.setOutput).toHaveBeenCalledWith('filename', 'vpm.json')
+    expect(core.setOutput).toHaveBeenCalledWith('path', 'output/vpm.json')
+  })
+
+  test('handles file write errors appropriately', async () => {
+    mockWriteFile.mockRejectedValueOnce(new Error('File write error') as never)
+
+    await run()
+
+    expect(mockWriteFile).toHaveBeenCalled()
+    expect(core.error).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to write file')
+    )
   })
 })

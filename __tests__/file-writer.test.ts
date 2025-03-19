@@ -18,7 +18,8 @@ jest.unstable_mockModule('fs', () => ({
 
 jest.unstable_mockModule('node:path', () => ({
   default: {
-    dirname: mockDirname
+    dirname: mockDirname,
+    join: jest.fn().mockImplementation((dir, filename) => `${dir}/${filename}`)
   }
 }))
 
@@ -32,6 +33,15 @@ describe('FileWriter', () => {
 
     mockCoreDebug.mockClear()
     mockCoreError.mockClear()
+  })
+
+  test('getFilePath returns correct path', async () => {
+    const dir = '/path/to'
+    const filename = 'file.json'
+
+    const result = FileWriter.getFilePath(dir, filename)
+
+    expect(result).toBe('/path/to/file.json')
   })
 
   test('writeFile creates directory and writes file successfully', async () => {
