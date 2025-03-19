@@ -38180,6 +38180,9 @@ class RepositoryGenerator {
 }
 
 class FileWriter {
+    static getFilePath(dir, filename) {
+        return pathModule.join(dir, filename);
+    }
     static async writeFile(outputPath, content) {
         try {
             const dir = pathModule.dirname(outputPath);
@@ -38207,7 +38210,8 @@ async function run() {
         const packageId = coreExports.getInput('package-id', { required: true });
         const packageUrl = coreExports.getInput('package-url', { required: true });
         const repositories = coreExports.getInput('repositories', { required: true });
-        const filePath = coreExports.getInput('path', { required: false });
+        const outoutDir = coreExports.getInput('output', { required: true });
+        const filename = coreExports.getInput('filename', { required: true });
         const minified = coreExports.getInput('minified', { required: false }).toLowerCase() === 'true';
         coreExports.debug('Starting VPM repository generation...');
         const packageFetcher = new PackageFetcher(token);
@@ -38236,9 +38240,12 @@ async function run() {
             ? JSON.stringify(result)
             : JSON.stringify(result, null, 2);
         coreExports.setOutput('package', output);
+        const filePath = FileWriter.getFilePath(outoutDir, filename);
         if (filePath !== '') {
             try {
                 await FileWriter.writeFile(filePath, output);
+                coreExports.setOutput('output', outoutDir);
+                coreExports.setOutput('filename', filename);
                 coreExports.setOutput('path', filePath);
             }
             catch (err) {
