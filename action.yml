@@ -1,23 +1,55 @@
-name: The name of your action here
-description: Provide a description here
-author: Your name or organization here
+name: VRChat Package Lister
+description:
+  Extract package data from multiple VRChat repositories and generate a package
+  list.
+author: Limitex
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: heart
-  color: red
+  icon: upload-cloud
+  color: blue
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: Your input description here
+  token:
+    description: 'GitHub token'
     required: true
-    default: '1000'
+  package-title:
+    description: 'Package title'
+    required: true
+  package-author:
+    description: 'Package author'
+    required: true
+  package-id:
+    description: 'Package ID'
+    required: true
+  package-url:
+    description: 'Package URL'
+    required: true
+  repositories:
+    description: 'Comma-separated list of repository owner/repo'
+    required: true
+  output:
+    description: 'Output directory'
+    required: true
+  filename:
+    description: 'Filename of the package list'
+    required: true
+  minified:
+    description: 'Minified output'
+    required: false
+    default: false
 
 # Define your outputs here.
 outputs:
-  time:
-    description: Your output description here
+  package:
+    description: 'Package data'
+  output:
+    description: 'Output directory'
+  filename:
+    description: 'Filename of the package list'
+  path:
+    description: 'Path to the package list'
 
 runs:
   using: node20

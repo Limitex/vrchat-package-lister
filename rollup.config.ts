@@ -8,9 +8,11 @@ const config = {
   input: 'src/index.ts',
   output: {
     esModule: true,
-    file: 'dist/index.js',
+    dir: 'dist',
     format: 'es',
-    sourcemap: true
+    sourcemap: true,
+    entryFileNames: 'index.js',
+    inlineDynamicImports: true
   },
   plugins: [typescript(), nodeResolve({ preferBuiltins: true }), commonjs()]
 }

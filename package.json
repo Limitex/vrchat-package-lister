@@ -1,17 +1,17 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
+  "name": "vrchat-package-lister",
+  "description": "Extract package data from multiple VRChat repositories and generate a package list.",
+  "version": "1.0.0",
   "author": "",
   "type": "module",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/Limitex/vrchat-package-lister",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/Limitex/vrchat-package-lister.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/Limitex/vrchat-package-lister/issues"
   },
   "keywords": [
     "actions"
@@ -37,7 +37,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.11.1"
+    "@actions/core": "^1.11.1",
+    "@octokit/rest": "^21.1.1",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.7",
