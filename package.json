@@ -1,7 +1,7 @@
 {
   "name": "vrchat-package-lister",
   "description": "Extract package data from multiple VRChat repositories and generate a package list.",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "",
   "type": "module",
   "private": true,
