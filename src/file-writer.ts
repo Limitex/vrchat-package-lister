@@ -3,6 +3,9 @@ import pathModule from 'node:path'
 import * as core from '@actions/core'
 
 export class FileWriter {
+  static getFilePath(dir: string, filename: string): string {
+    return pathModule.join(dir, filename)
+  }
   static async writeFile(outputPath: string, content: string): Promise<void> {
     try {
       const dir = pathModule.dirname(outputPath)

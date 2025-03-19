@@ -29,9 +29,12 @@ inputs:
   repositories:
     description: 'Comma-separated list of repository owner/repo'
     required: true
-  path:
-    description: 'Path to save the package list'
-    required: false
+  output:
+    description: 'Output directory'
+    required: true
+  filename:
+    description: 'Filename of the package list'
+    required: true
   minified:
     description: 'Minified output'
     required: false
@@ -41,6 +44,10 @@ inputs:
 outputs:
   package:
     description: 'Package data'
+  output:
+    description: 'Output directory'
+  filename:
+    description: 'Filename of the package list'
   path:
     description: 'Path to the package list'
 

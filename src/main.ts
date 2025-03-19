@@ -21,7 +21,8 @@ export async function run(): Promise<void> {
     const packageId = core.getInput('package-id', { required: true })
     const packageUrl = core.getInput('package-url', { required: true })
     const repositories = core.getInput('repositories', { required: true })
-    const filePath = core.getInput('path', { required: false })
+    const outoutDir = core.getInput('output', { required: true })
+    const filename = core.getInput('filename', { required: true })
     const minified =
       core.getInput('minified', { required: false }).toLowerCase() === 'true'
 
@@ -75,9 +76,13 @@ export async function run(): Promise<void> {
 
     core.setOutput('package', output)
 
+    const filePath = FileWriter.getFilePath(outoutDir, filename)
+
     if (filePath !== '') {
       try {
         await FileWriter.writeFile(filePath, output)
+        core.setOutput('output', outoutDir)
+        core.setOutput('filename', filename)
         core.setOutput('path', filePath)
       } catch (err) {
         core.error(`Failed to write file to ${filePath}: ${err}`)

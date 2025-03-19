@@ -63,11 +63,14 @@ jobs:
           package-id: 'test-action'
           package-url: 'https://github.com/test-action'
           repositories: 'actions/typescript-action'
-          path: '.index.json'
+          output: './dist'
+          filename: 'index.json'
           minified: true
 
       - name: Print Output
         id: output
         run: |
           echo "Package: ${{ steps.test-action.outputs.package }}"
+          echo "Filename: ${{ steps.test-action.outputs.filename }}"
+          echo "Output: ${{ steps.test-action.outputs.output }}"
           echo "Path: ${{ steps.test-action.outputs.path }}"
